@@ -1,0 +1,35 @@
+plantee()
+
+        changement_graine(1)
+        deplacement_avant(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(2)
+        deplacement_arriere(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(3)
+        deplacement_avant(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(4)
+        deplacement_arriere(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(5)
+        deplacement_avant(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(6)
+        deplacement_arriere(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(7)
+        deplacement_avant(NB_BLOC)
+        deplacement_gauche(1)
+
+        changement_graine(8)
+        deplacement_arriere(NB_BLOC)
+        deplacement_gauche(1)
+
+        arret_plantee()
