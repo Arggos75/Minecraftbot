@@ -1,122 +1,155 @@
+# mobfarm.py — autoclick + déplacements asymétriques (retour exact à la position)
 import time
-import random
 import threading
+import random
 import keyboard
 import win32api, win32con
 
-# === CONFIGURATION ===
-CLICKS_PER_SECOND = 6        # ⚙️ vitesse moyenne (clics/sec) — change ici
-PAUSE_CHANCE = 0.01          # ⚙️ probabilité de faire une pause après un clic (1% = rare)
-PAUSE_DURATION = (0.2, 0.5)  # ⚙️ durée min/max d'une pause "humaine"
+# ===========================
+# CONFIG
+# ===========================
+CPS = 10
+CLICK_INTERVAL = 1.0 / CPS
+RANDOM_PAUSE_MIN = 10.0
+RANDOM_PAUSE_MAX = 20.0
+MOVE_DURATION_MIN = 0.1   # X min
+MOVE_DURATION_MAX = 0.2   # X max
 
-# === Touches ===
-VK_Q = 0x51
-VK_S = 0x53
-VK_D = 0x44
-VK_Z = 0x5A
-VK_PLUS = 0xBB  # touche '+'
+# Déplacements (AZERTY Minecraft)
+MOVE_KEYS_VK = {
+    "forward": ord('Z'),  # haut
+    "back":    ord('S'),  # bas
+    "left":    ord('Q'),
+    "right":   ord('D'),
+}
 
-# === État global ===
-_running_lock = threading.Lock()
-_running = False
-_stop_event = threading.Event()
-_click_thread = None
+TOGGLE_KEY = "+"       # toggle autoclick
+EMERGENCY_STOPS = ["a", "e"]  # arrêts d'urgence (libres, pas ZQSD)
 
+# ===========================
+# ÉTAT GLOBAL
+# ===========================
+running = False
+_pause_flag = False
+_lock = threading.Lock()
 
-# --- Fonctions de base ---
-
-def _any_stop_key_pressed() -> bool:
-    """Vrai si Z, S, Q ou D pressée."""
-    for key in ('t', 'e'):
-        try:
-            if keyboard.is_pressed(key):
-                return True
-        except:
-            pass
-    return False
-
-def _should_stop() -> bool:
-    if _stop_event.is_set():
-        return True
-    if _any_stop_key_pressed():
-        request_stop("Touche Z/S/Q/D pressée")
-        return True
-    return False
-
-def request_stop(reason: str = ""):
-    """Déclenche l'arrêt global."""
-    global _running
-    if not _stop_event.is_set():
-        _stop_event.set()
-        print("Autoclick: arrêt demandé" + (f" ({reason})" if reason else ""))
-    with _running_lock:
-        _running = False
-
-
-# --- Autoclick ---
-
-def click_left():
+# ===========================
+# UTILITAIRES
+# ===========================
+def left_click():
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-    time.sleep(random.uniform(0.005, 0.015))
+    time.sleep(0.03)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
-def _autoclick_loop():
-    """Boucle principale d'autoclick humain."""
-    print(f"[Autoclick] Démarré ({CLICKS_PER_SECOND} cps)")
-    base_interval = 1 / CLICKS_PER_SECOND
+def vk_hold(duration, vk_code):
+    """Maintient la touche vk_code pendant 'duration' secondes."""
+    if duration <= 0:
+        return
+    win32api.keybd_event(vk_code, 0, 0, 0)
+    t0 = time.time()
+    while time.time() - t0 < duration:
+        time.sleep(0.01)
+    win32api.keybd_event(vk_code, 0, win32con.KEYEVENTF_KEYUP, 0)
 
-    try:
-        while not _should_stop():
-            click_left()
-
-            # délai moyen autour de la cible
-            jitter = random.uniform(-0.015, 0.015)
-            interval = max(0.03, base_interval + jitter)
-
-            # pause humaine (rare)
-            if random.random() < PAUSE_CHANCE:
-                pause = random.uniform(*PAUSE_DURATION)
-                print(f"[Autoclick] Pause humaine {pause:.2f}s")
-                time.sleep(pause)
-
-            time.sleep(interval)
-    finally:
-        print("[Autoclick] Arrêté.")
-        with _running_lock:
-            global _running
-            _running = False
-
-
-# --- Gestion touche '+' ---
-
-def _on_plus():
-    global _running, _click_thread
-    with _running_lock:
-        if not _running:
-            _stop_event.clear()
-            print("Appui '+' → démarrage de l’autoclick.")
-            _running = True
-            _click_thread = threading.Thread(target=_autoclick_loop, daemon=True)
-            _click_thread.start()
+# ===========================
+# AUTOCLICK
+# ===========================
+def attack_loop():
+    global running, _pause_flag
+    print(f"Autoclick prêt ({CPS} cps). '+' pour démarrer/arrêter.", flush=True)
+    while running:
+        with _lock:
+            paused = _pause_flag
+        if not paused:
+            # petit lot de clics pour lisser la charge
+            for _ in range(5):
+                if not running or _pause_flag:
+                    break
+                left_click()
+                time.sleep(CLICK_INTERVAL)
         else:
-            print("Appui '+' → arrêt de l’autoclick.")
-            request_stop("Touche '+' pressée")
+            time.sleep(0.02)
+    print("[Autoclick] Arrêté.", flush=True)
 
+def toggle_attack():
+    global running
+    if not running:
+        running = True
+        threading.Thread(target=attack_loop, daemon=True).start()
+        print("[Autoclick] Démarré.", flush=True)
+    else:
+        running = False
+        print("[Autoclick] Arrêt demandé.", flush=True)
 
-# --- Main loop ---
+def emergency_stop():
+    global running
+    running = False
+    print("⛔ Arrêt d'urgence.", flush=True)
 
-def main():
-    print("Autoclick prêt. '+' pour démarrer/arrêter, Z/S/Q/D pour stop d'urgence.")
-    print(f"Vitesse actuelle : {CLICKS_PER_SECOND} clics/seconde.")
-    keyboard.add_hotkey('+', _on_plus)
+# ===========================
+# DÉPLACEMENTS ASYMÉTRIQUES (X, 2X, X)
+# ===========================
+def perform_vertical_then_horizontal():
+    """Pause l'attaque, fait (Z X) → (S 2X) → (Z X), puis (Q X) → (D 2X) → (Q X)."""
+    global _pause_flag
+    with _lock:
+        if not running:
+            return
+        _pause_flag = True
+    print("[MVT] Pause attaque → déplacements…", flush=True)
 
-    try:
-        while True:
-            time.sleep(0.2)
-    except KeyboardInterrupt:
-        request_stop("CTRL+C")
-        print("Sortie.")
+    # Tirage X (vertical)
+    Xv = random.uniform(MOVE_DURATION_MIN, MOVE_DURATION_MAX)
+    print(f"[MVT] Vertical: Z {Xv:.3f}s → S {2*Xv:.3f}s → Z {Xv:.3f}s", flush=True)
+    vk_hold(Xv, MOVE_KEYS_VK["forward"])     # Z (haut)
+    time.sleep(0.03)
+    vk_hold(2 * Xv, MOVE_KEYS_VK["back"])    # S (bas)
+    time.sleep(0.03)
+    vk_hold(Xv, MOVE_KEYS_VK["forward"])     # Z (haut)
 
+    time.sleep(0.08)
 
-if __name__ == "__main__":
-    main()
+    # Tirage X (horizontal)
+    Xh = random.uniform(MOVE_DURATION_MIN, MOVE_DURATION_MAX)
+    print(f"[MVT] Horizontal: Q {Xh:.3f}s → D {2*Xh:.3f}s → Q {Xh:.3f}s", flush=True)
+    vk_hold(Xh, MOVE_KEYS_VK["left"])        # Q (gauche)
+    time.sleep(0.03)
+    vk_hold(2 * Xh, MOVE_KEYS_VK["right"])   # D (droite)
+    time.sleep(0.03)
+    vk_hold(Xh, MOVE_KEYS_VK["left"])        # Q (gauche)
+
+    with _lock:
+        _pause_flag = False
+    print("[MVT] Déplacements terminés → reprise de l'attaque.", flush=True)
+
+# ===========================
+# SCHEDULER
+# ===========================
+def scheduler_loop():
+    print("[SCHED] Actif (10–20 s aléatoires). Premier déclenchement dans 3 s.", flush=True)
+    time.sleep(3.0)  # test initial rapide
+    while True:
+        wait_t = random.uniform(RANDOM_PAUSE_MIN, RANDOM_PAUSE_MAX)
+        print(f"[SCHED] Prochain mouvement dans {wait_t:.1f}s", flush=True)
+        time.sleep(wait_t)
+        with _lock:
+            should_move = running and not _pause_flag
+        if should_move:
+            print("[SCHED] Déclenchement mouvement asymétrique", flush=True)
+            threading.Thread(target=perform_vertical_then_horizontal, daemon=True).start()
+        else:
+            print("[SCHED] Attaque inactive ou déjà en pause → skip.", flush=True)
+
+# ===========================
+# HOTKEYS
+# ===========================
+keyboard.add_hotkey(TOGGLE_KEY, toggle_attack)
+for key in EMERGENCY_STOPS:
+    keyboard.add_hotkey(key, emergency_stop)
+
+# ===========================
+# MAIN
+# ===========================
+threading.Thread(target=scheduler_loop, daemon=True).start()
+print("Programme prêt. '+' pour activer l’autoclick. (Z/S/Q/D = déplacement)", flush=True)
+keyboard.wait()

@@ -332,6 +332,7 @@ def sellAll():
     _press_key(VK_T, 0.1) # ouvrir chat
     time.sleep(1.5)
     command_sell_all() # comande sell all
+    time.sleep(0.5)
     _press_key(VK_ESCAPE, 0.1)  # fermer chat
 
 
@@ -404,7 +405,7 @@ def chargement_inventaire():
     disable_caplock()
 
     #ee/sell all/sell all
-    # esrefill_inventory()
+    #refill_inventory()
 
     deplacement_arriere(1) #pour pas rouvrir le coffre
 
@@ -445,7 +446,7 @@ def chargement_inventaire():
 
     sellAll()
 
-
+"""
     refill_inventory()
 
     deplacement_arriere(1) #pour pas rouvrir le coffre
@@ -485,7 +486,7 @@ def chargement_inventaire():
 
     arret_plantee()
 
-
+"""
 
 
 # =========================
