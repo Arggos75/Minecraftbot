@@ -108,7 +108,7 @@ def perform_vertical_then_horizontal():
     vk_hold(Xv, MOVE_KEYS_VK["forward"])     # Z (haut)
 
     time.sleep(0.08)
-
+    """
     # Tirage X (horizontal)
     Xh = random.uniform(MOVE_DURATION_MIN, MOVE_DURATION_MAX)
     print(f"[MVT] Horizontal: Q {Xh:.3f}s → D {2*Xh:.3f}s → Q {Xh:.3f}s", flush=True)
@@ -117,6 +117,7 @@ def perform_vertical_then_horizontal():
     vk_hold(2 * Xh, MOVE_KEYS_VK["right"])   # D (droite)
     time.sleep(0.03)
     vk_hold(Xh, MOVE_KEYS_VK["left"])        # Q (gauche)
+    """
 
     with _lock:
         _pause_flag = False

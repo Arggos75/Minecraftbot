@@ -8,7 +8,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 import random
 
 # 37 48
-NB_BLOC = 48
+NB_BLOC = 50
 
 VK_F3 = 0x72
 VK_C  = 0x43
@@ -326,14 +326,15 @@ def getFromChest(slot_num: int):
     release_shift()
 
 def sellAll():
-    time.sleep(3)
+    time.sleep(5)
     _press_key(VK_E, 0.1) # fermer coffre
-    time.sleep(1.5)
+    time.sleep(5)
     _press_key(VK_T, 0.1) # ouvrir chat
-    time.sleep(1.5)
+    time.sleep(5)
     command_sell_all() # comande sell all
-    time.sleep(0.5)
-    _press_key(VK_ESCAPE, 0.1)  # fermer chat
+    time.sleep(5)
+    #_press_key(VK_ESCAPE, 0.1)  # fermer chat
+    time.sleep(3)
 
 
 import random
@@ -405,7 +406,7 @@ def chargement_inventaire():
     disable_caplock()
 
     #ee/sell all/sell all
-    #refill_inventory()
+    refill_inventory()
 
     deplacement_arriere(1) #pour pas rouvrir le coffre
 
@@ -446,7 +447,7 @@ def chargement_inventaire():
 
     sellAll()
 
-"""
+
     refill_inventory()
 
     deplacement_arriere(1) #pour pas rouvrir le coffre
@@ -486,7 +487,48 @@ def chargement_inventaire():
 
     arret_plantee()
 
-"""
+
+
+def plant_1_champ():
+
+    disable_caplock()
+
+    plantee()
+
+    changement_graine(1)
+    deplacement_arriere(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(2)
+    deplacement_avant(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(3)
+    deplacement_arriere(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(4)
+    deplacement_avant(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(5)
+    deplacement_arriere(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(6)
+    deplacement_avant(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(7)
+    deplacement_arriere(NB_BLOC)
+    deplacement_droite(1)
+
+    changement_graine(8)
+    deplacement_avant(NB_BLOC+8)
+
+    arret_plantee()
+
+
 
 
 # =========================
@@ -496,7 +538,8 @@ def chargement_inventaire():
 def _sequence():
     print("Séquence démarrée.")
     try:
-        chargement_inventaire()
+        #chargement_inventaire()
+        plant_1_champ()
         print("Séquence terminée.")
     finally:
         if _stop_event.is_set():

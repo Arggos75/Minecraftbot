@@ -293,19 +293,19 @@ def _sequence():
         plantee()
         if _should_stop(): return
 
-        deplacement_gauche(23)
+        deplacement_gauche(70)
         if _should_stop(): return
 
         recentrage_camera_centrale()
         if _should_stop(): return
 
-        deplacement_droite(23)
+        deplacement_droite(70)
         if _should_stop(): return
 
         recentrage_camera_ligne_bas()
         if _should_stop(): return
 
-        deplacement_gauche(23)
+        deplacement_gauche(70)
         if _should_stop(): return
 
         arret_plantee()

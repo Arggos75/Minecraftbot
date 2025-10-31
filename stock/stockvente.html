@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop – Mistii_ (JH Sword)</title>
+  <style>
+    :root { --bg:#0f1115; --card:#171a21; --text:#e9edf1; --muted:#8b93a6; --accent:#ff9b00; --gold: #ffd54d; }
+    body{margin:0;padding:24px;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+    h1{font-size:22px;margin-bottom:20px}
+    table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden}
+    thead th{font-weight:600;text-align:left;padding:12px;border-bottom:1px solid #232736; color:#c7d0e0; cursor:pointer}
+    tbody td{padding:10px 12px;border-top:1px solid #232736}
+    .type{font-weight:600}
+    .qty{color:var(--muted)}
+    .name{color:var(--accent);font-weight:600}
+    .price{color:var(--gold);font-variant-numeric:tabular-nums}
+    caption{caption-side:bottom;text-align:left;color:#95a0b8;padding:10px 2px}
+    @media (max-width:720px){
+      thead{display:none}
+      table, tbody, tr, td{display:block;width:100%}
+      tr{border-bottom:1px solid #232736}
+      td{border:none;padding:8px 12px}
+      td::before{content:attr(data-label);display:block;color:#8090a6;font-size:12px;margin-bottom:2px}
+    }
+  </style>
+</head>
+<body>
+  <h1>Items en vente chez Mistii_ (JH Sword)</h1>
+  <table id="shop">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Type</th>
+        <th onclick="sortTable(1)">Quantité</th>
+        <th onclick="sortTable(2)">Nom</th>
+        <th onclick="sortTable(3)">Prix (gold)</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- ==== Capture 1 ==== -->
+      <tr><td>Achat</td><td>NC</td><td class="name">Insecte</td><td class="price">14,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Sauterelle</td><td class="price">5,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Araignée</td><td class="price">1,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Papillon</td><td class="price">20,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Rubis</td><td class="price">10,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Gemme</td><td class="price">15,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Cosmétique</td><td class="price">30,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Tropical Fish</td><td class="price">50,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Fourmi</td><td class="price">5,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Coccinelle</td><td class="price">1,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Abeille</td><td class="price">22,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Termite</td><td class="price">40,000</td></tr>
+
+      <!-- ==== Capture 2 ==== -->
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de cochon</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de mouton</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de zombie</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de grenouille</td><td class="price">12,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de squelette</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de poulet</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de vache</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de poulpe</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de creeper</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de tortue</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de panda</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme d’araignée</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de loup</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme d’enderman</td><td class="price">2,000</td></tr>
+
+      <!-- ==== Capture 3 ==== -->
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de vagabond</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de sorcière</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de warden</td><td class="price">12,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme d’évocateur</td><td class="price">4,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de renifleur</td><td class="price">4,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de dauphin</td><td class="price">4,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de slime</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme d’abeille</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de gardien</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de poulpe</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de bonhomme</td><td class="price">27,500</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de noyé</td><td class="price">12,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de ravageur</td><td class="price">1,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de piglin</td><td class="price">2,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Âme de agent de pillage</td><td class="price">2,000</td></tr>
+
+      <!-- ==== Capture 4 ==== -->
+      <tr><td>Achat</td><td>NC</td><td class="name">Netherite Ingot</td><td class="price">50,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Sushi</td><td class="price">15,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Crâne enflammé</td><td class="price">20,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Corne de</td><td class="price">150,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Anguille</td><td class="price">200,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Netherite Scrap</td><td class="price">12,500</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Poisson corail</td><td class="price">70,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Œil de géant</td><td class="price">80,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Œil du néant</td><td class="price">90,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Bâton de blaze</td><td class="price">20,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Ancient Debris</td><td class="price">12,500</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Poisson lune</td><td class="price">15,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Homard royal</td><td class="price">30,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Pierre d’âme</td><td class="price">45,000</td></tr>
+      <tr><td>Achat</td><td>NC</td><td class="name">Nageoire de</td><td class="price">20,000</td></tr>
+
+    </tbody>
+    <caption>Extraction automatique des 4 captures – Données issues de panneaux Mistii_ (et Ulice46). Quantités non déterminables, marquées NC.</caption>
+  </table>
+
+  <script>
+    function sortTable(n){
+      const table=document.getElementById("shop").tBodies[0];
+      const rows=[...table.rows];
+      let dir=table.getAttribute("data-dir"+n)==="asc"?"desc":"asc";
+      rows.sort((a,b)=>{
+        const A=a.cells[n].innerText.trim();
+        const B=b.cells[n].innerText.trim();
+        const numA=Number(A.replaceAll(/[^\d]/g,""));
+        const numB=Number(B.replaceAll(/[^\d]/g,""));
+        const bothNums=!isNaN(numA)&&!isNaN(numB)&&A!=="NC"&&B!=="NC";
+        if(bothNums){ return dir==="asc"?numA-numB:numB-numA; }
+        return dir==="asc"?A.localeCompare(B):B.localeCompare(A);
+      });
+      rows.forEach(r=>table.appendChild(r));
+      table.setAttribute("data-dir"+n,dir);
+    }
+  </script>
+</body>
+</html>
