@@ -8,7 +8,7 @@ import win32api, win32con
 # ===========================
 # CONFIG
 # ===========================
-CPS = 10
+CPS = 8
 CLICK_INTERVAL = 1.0 / CPS
 RANDOM_PAUSE_MIN = 10.0
 RANDOM_PAUSE_MAX = 20.0
